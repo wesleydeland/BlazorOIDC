@@ -1,0 +1,72 @@
+﻿@page "/directapi"
+@inject IAntiforgeryHttpClientFactory httpClientFactory
+@inject IJSRuntime JSRuntime
+@inject AuthenticationStateProvider authStateProvider
+
+<h1>Data from Direct API</h1>
+
+<p>@authMessage</p>
+
+@if (claims.Any())
+{
+    <ul>
+    @foreach (var claim in claims)
+        {
+            <li>@claim.Type: @claim.Value</li>
+        }
+    </ul>
+}
+
+<p>@surname</p>
+
+@if (apiData == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var data in apiData)
+            {
+                <tr>
+                    <td>@data</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private string[]? apiData;
+    private IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+    private string? authMessage;
+    private string? surname;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authStateProvider
+        .GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        var client = await httpClientFactory.CreateClientAsync();
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            authMessage = $"{user.Identity.Name} is authenticated.";
+            claims = user.Claims;
+            surname = user.FindFirst(c => c.Type == ClaimTypes.Surname)?.Value;
+        }
+        else
+        {
+            authMessage = "The user is NOT authenticated.";
+        }
+
+        apiData = await client.GetFromJsonAsync<string[]>("api/DirectApi");
+    }
+}
