@@ -10,6 +10,8 @@ WORKDIR /src
 
 # Copy the project file and restore dependencies
 COPY ["./Wesley.bff/Server/Wesley.bff.Server.csproj", "./"]
+COPY ["./Wesley.bff/Shared/Wesley.bff.Shared.csproj", "./"]
+COPY ["./Wesley.bff/Client/Wesley.bff.Client.csproj", "./"]
 RUN dotnet restore "Wesley.bff.Server.csproj"
 
 # Copy the rest of the application code
