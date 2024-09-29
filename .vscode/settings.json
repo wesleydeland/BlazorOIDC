@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/69ee1e76-3dc3-4a4b-aecd-2c5012f4dcfd/resourceGroups/wesley-site_group/providers/Microsoft.Web/sites/wesleydeland",
+    "appService.deploySubpath": "Wesley.bff/Server/bin/Publish"
+}
