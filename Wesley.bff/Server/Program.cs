@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,12 +54,17 @@ services.AddRazorPages().AddMvcOptions(options =>
     //options.Filters.Add(new AuthorizeFilter(policy));
 });
 
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+
 var app = builder.Build();
 
 if (env.IsDevelopment())
 {
+    app.UseSwagger(options => { options.RouteTemplate = "openapi/{documentName}.json"; });
     app.UseDeveloperExceptionPage();
     app.UseWebAssemblyDebugging();
+    app.MapScalarApiReference();
 }
 else
 {
@@ -70,8 +76,9 @@ app.UseSecurityHeaders(
         configuration["OpenIDConnectSettings:Authority"]!));
 
 app.UseHttpsRedirection();
-app.UseBlazorFrameworkFiles();
-app.UseStaticFiles();
+//app.UseBlazorFrameworkFiles();
+//app.UseStaticFiles();
+app.MapStaticAssets();
 
 app.UseRouting();
 

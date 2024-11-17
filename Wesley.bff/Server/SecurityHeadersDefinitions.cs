@@ -19,16 +19,17 @@ public static class SecurityHeadersDefinitions
                 builder.AddBlockAllMixedContent();
                 builder.AddImgSrc().Self().From("data:");
                 builder.AddFormAction().Self().From(idpHost);
-                builder.AddFontSrc().Self();
-                builder.AddStyleSrc().Self();
+                builder.AddFontSrc().Self().From("*.scalar.com");
+                builder.AddStyleSrc().Self().UnsafeInline();
                 builder.AddBaseUri().Self();
                 builder.AddFrameAncestors().None();
 
                 // due to Blazor
                 builder.AddScriptSrc()
-                   .WithNonce()
+                    .Self()
+                   //.WithNonce()
                    .UnsafeEval() // due to Blazor WASM
-                   .StrictDynamic()
+                   //.StrictDynamic()
                    .UnsafeInline(); // only a fallback for older browsers when the nonce is used 
 
             })
