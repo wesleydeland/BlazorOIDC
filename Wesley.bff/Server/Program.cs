@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,6 +57,16 @@ services.AddRazorPages().AddMvcOptions(options =>
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
+#pragma warning disable EXTEXP0018
+services.AddHybridCache(options =>
+{
+    options.DefaultEntryOptions = new HybridCacheEntryOptions
+    {
+        Expiration = TimeSpan.FromSeconds(30),
+        LocalCacheExpiration = TimeSpan.FromSeconds(30)
+    };
+});
+#pragma warning restore EXTEXP0018
 
 var app = builder.Build();
 
