@@ -29,7 +29,7 @@ public class DirectApiController : ControllerBase
     {
         
         var result = new List<string> { $"{this.User?.Identity?.Name}", "more data", "loads of data" };
-        Thread.Sleep(10000);
+        Thread.Sleep(3000);
         return result;
     }
 }
